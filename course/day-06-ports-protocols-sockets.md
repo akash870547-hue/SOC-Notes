@@ -49,7 +49,7 @@ Connection setup is normal behaviour. A large volume of SYNs without completion 
 | TCP 53 / UDP 53 | DNS | Query/response patterns; TCP is also used for large responses/zone transfer contexts |
 | UDP 67/68 | DHCP server/client | Lease negotiation, rogue server or abnormal request rate |
 | TCP 80 | HTTP | Host, method, URI, status, proxy visibility |
-| TCP 123 / UDP | NTP (commonly UDP 123) | Time-source consistency and clock drift |
+| UDP 123 | NTP (commonly UDP) | Time-source consistency and clock drift |
 | TCP 135 | Windows RPC endpoint mapper | Expected Windows management behaviour |
 | TCP 139 / 445 | NetBIOS session / SMB | File sharing, remote admin, lateral movement context |
 | TCP 389 / 636 | LDAP / LDAPS | Directory traffic, secure transport and source roles |
