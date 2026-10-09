@@ -185,7 +185,7 @@ Har SOC analyst ko NIST Incident Handling lifecycle ke according chalna hota hai
 
 **Q1: What will you do if you receive a high-severity alert for a potential malware execution on an executive's laptop?**
 
-* **Answer Approach:** First, verify the alert details in SIEM/EDR (Process ID, Parent Process, Hash reputation on VirusTotal). If confirmed malicious (True Positive), initiate immediate containment by network-isolating the endpoint via EDR to prevent lateral movement. Document all artifacts, notify the Incident Response lead/L2, and open an incident ticket according to the organization's SLA.
+* **Answer Approach:** First, verify the alert details in SIEM/EDR (Process ID, Parent Process, Hash reputation on VirusTotal). If evidence supports a true positive and the approved incident playbook authorizes containment, coordinate endpoint isolation through EDR. Do not take disruptive action outside your response authority. Document all artifacts, notify the Incident Response lead/L2, and open an incident ticket according to the organization's SLA.
 
 **Q2: What is the difference between an Indicator of Compromise (IOC) and an Indicator of Attack (IOA)?**
 
