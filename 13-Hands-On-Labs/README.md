@@ -2,6 +2,14 @@
 
 Use synthetic events or systems you own / are explicitly authorized to test. The objective is to produce analyst artifacts, not merely a query with results.
 
+## TryHackMe SOC L1 Companion
+
+**Starting the SOC L1 path?** Open the [TryHackMe SOC L1 room map and field notes](tryhackme/README.md). It links relevant official rooms and provides spoiler-free Hinglish study sheets for alert triage, phishing, SIEM searches, network traffic, host telemetry, threat intelligence and capstone reporting.
+
+The companion is independent learning material, not an official TryHackMe resource. Public notes do not include flags, answers or step-by-step walkthroughs for active rooms; see the platform's [current Acceptable Use Policy](https://tryhackme.com/legal/acceptable-use-policy).
+
+
+
 ## Lab 01 · Login anomaly
 
 **Scenario:** A synthetic dataset contains repeated failed logons followed by a successful logon. Decide whether it looks like user error, automation or suspicious activity.
