@@ -168,12 +168,13 @@ dst=10.0.1.15 dport=445 reason="Rule_Drop_SMB_Inbound" rule_id=104
 ### Critical Fields to Correlate
 
 1. **Action (PERMIT / DENY / REJECT):**
-* `DENY/DROP`: Packet silently drop kar diya gaya (best practice for external attacks).
-* `REJECT`: Packet drop kiya gaya aur source ko RST/ICMP Port Unreachable packet wapas bheja gaya (reveals firewall presence).
+* `DENY/DROP`: Packet silently discard ho jata hai; useful where policy avoids sending a response.
+* `REJECT`: Packet discard hota hai aur sender ko TCP RST / ICMP unreachable response mil sakta hai.
+* **Preference:** DROP vs REJECT ka universal winner nahi hai. Choice service needs, troubleshooting, firewall policy and threat model par depend karti hai. A dropped scan doesn't prove compromise—or prove that all risk is gone.
 
 2. **Direction (Inbound vs Outbound):**
 * *Inbound Drops:* Normal internet noise ya automated scanning (Low priority unless targeting critical asset).
-* *Outbound Drops:* Highly critical! Internal endpoint kisi malicious external IP se connect hone ki koshish kar raha hai jo firewall rule dwara block hui (Possible malware infection / C2 attempt).
+* *Outbound Drops:* Worth checking, especially when an internal endpoint repeatedly attempts a blocked destination. Correlate process, destination, DNS, asset role and neighbouring events; a single block does not by itself confirm malware or C2.
 
 3. **Port & Protocol Mismatch:** Non-standard ports par critical protocols ka chalna.
 
