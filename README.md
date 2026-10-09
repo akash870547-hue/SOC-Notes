@@ -11,7 +11,7 @@
 
 **From raw telemetry to a defensible decision.**
 
-[**Start Here**](#-start-here) · [**Learning Roadmap**](#-the-analyst-path) · [**Detection Library**](#-detection--investigation-workbench) · [**Hands-on Labs**](#-lab-queue)
+[**Start Here**](#start-here) · [**Learning Roadmap**](#analyst-path) · [**Detection Library**](#detection-workbench) · [**Hands-on Labs**](#lab-queue)
 
 ![Focus](https://img.shields.io/badge/FOCUS-SOC%20%7C%20Detection%20%7C%20DFIR-111827?style=flat-square)
 ![Approach](https://img.shields.io/badge/APPROACH-Understand%20%7C%20Validate%20%7C%20Document-0d9488?style=flat-square)
@@ -23,16 +23,18 @@
 
 > **Field rule:** A log line is an observation, not a verdict. Verify the context, correlate the evidence, record uncertainty, and explain the decision.
 
+<a id="start-here"></a>
 ## ◈ Start here
 
 This repository is a growing, practical knowledge base for Security Operations Center (SOC) analysis. It is organized like an analyst's field manual: concise concepts, triage workflows, telemetry references, detection logic, investigation checklists, and reproducible labs.
 
 - **New to SOC?** Follow the [Analyst Path](#-the-analyst-path) in order.
-- **Working an alert?** Use the [Triage Card](#-the-60-second-triage-card), then move to the relevant topic.
+- **Working an alert?** Use the [Triage Card](#triage-card), then move to the relevant topic.
 - **Writing a detection?** Start in [Detection Engineering](07-Detection-Engineering/README.md) and [Sigma Rules](12-Use-Cases-Sigma-Rules/README.md).
 - **Need investigation steps?** Open [Incident Response](08-Incident-Response/README.md) or [DFIR](09-DFIR/README.md).
 - **Preparing for interviews?** Use the [Interview Vault](14-Interview-Questions/README.md).
 
+<a id="analyst-path"></a>
 ## ◈ The analyst path
 
 <img src="assets/incident-lifecycle.svg" alt="SOC investigation lifecycle" width="100%"/>
@@ -47,6 +49,7 @@ This repository is a growing, practical knowledge base for Security Operations C
 | 06 · Respond | What should be contained, preserved, and communicated? | [Incident Response](08-Incident-Response/README.md) · [DFIR](09-DFIR/README.md) |
 | 07 · Improve | What did the case teach us? | [Labs](13-Hands-On-Labs/README.md) · [Interview Vault](14-Interview-Questions/README.md) |
 
+<a id="triage-card"></a>
 ## ◈ The 60-second triage card
 
 Use this as a **memory aid**, not as a replacement for your organization's runbook.
@@ -67,6 +70,7 @@ Use this as a **memory aid**, not as a replacement for your organization's runbo
 - **What happened next?** Correlated timeline and scope.
 - **What do we recommend?** Action, owner, priority, and rationale.
 
+<a id="detection-workbench"></a>
 ## ◈ Detection & investigation workbench
 
 | Workbench | What belongs here |
@@ -79,6 +83,7 @@ Use this as a **memory aid**, not as a replacement for your organization's runbo
 | [Sigma & Use Cases](12-Use-Cases-Sigma-Rules/README.md) | Portable rules, use-case cards, test data and ATT&CK mapping |
 | [Threat Intelligence](10-Threat-Intelligence/README.md) | IOC handling, enrichment, confidence, freshness and context |
 
+<a id="lab-queue"></a>
 ## ◈ Lab queue
 
 All examples should use **synthetic telemetry, intentionally vulnerable local labs, or systems you are explicitly authorized to test**. Do not paste real credentials, personal data, internal hostnames, or customer logs into public notes.
@@ -133,7 +138,7 @@ For incident or hunt write-ups, add: **scope, time range, assumptions, evidence 
 
 ## ◈ Contribution / note drop
 
-Bring raw notes, screenshots, PDFs, commands, class notes, or rough explanations. They can be turned into structured Markdown with diagrams, examples, cross-links, glossary entries, and lab exercises. Sensitive logs and secrets should be sanitized before sharing.
+Bring raw notes, screenshots, PDFs, commands, class notes, or rough explanations. They can be turned into structured Markdown with diagrams, examples, cross-links, glossary entries, and lab exercises. Follow the [Contribution Guide](CONTRIBUTING.md); sensitive logs and secrets must be sanitized before sharing.
 
 **Status:** living field manual — content is meant to improve as labs are tested and notes are added.
 
