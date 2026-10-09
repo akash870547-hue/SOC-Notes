@@ -31,7 +31,7 @@ SIEM Core Lifecycle:
 3. **Correlation Engine:** Real-time rules match karna.
 * *Example:* "Agar ek hi IP se 5 minute ke andar 20 failed logins (Event 4625) aate hain aur uske turant baad 1 successful login (Event 4624) aata hai, toh High-Severity Brute Force alert generate karo."
 
-4. **Retention & Archival:** Compliance (PCI-DSS, ISO 27001) ke audit rules follow karne ke liye logs ko 90 days se lekar multiple years tak safely store rakhna.
+4. **Retention & Archival:** Logs ko defined retention and archival policy ke according safely store karna. Requirements organization, jurisdiction, contract, incident-response needs and applicable standards par depend karte hain; **90 days is not a universal rule**. Retention period and searchable-hot-storage period may also differ.
 
 ---
 
