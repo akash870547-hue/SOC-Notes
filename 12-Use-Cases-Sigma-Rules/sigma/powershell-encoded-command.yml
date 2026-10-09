@@ -1,0 +1,38 @@
+title: PowerShell Encoded Command Invocation
+id: a2d8bc75-6d56-4f76-b01b-fbf0f5c87d02
+status: experimental
+description: >
+  Identifies PowerShell process command lines containing common encoded-command
+  flags. Requires tuning and validation in the target environment.
+references:
+  - https://attack.mitre.org/techniques/T1059/001/
+author: SOC-Notes contributors
+date: 2026/10/09
+tags:
+  - attack.execution
+  - attack.t1059.001
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection_image:
+    Image|endswith:
+      - '\\powershell.exe'
+      - '\\pwsh.exe'
+  selection_flag:
+    CommandLine|contains:
+      - ' -enc '
+      - ' -encodedcommand '
+  condition: all of selection_*
+falsepositives:
+  - Approved administration or software deployment scripts
+  - Management tooling that uses encoded arguments
+level: medium
+fields:
+  - Computer
+  - User
+  - Image
+  - ParentImage
+  - CommandLine
+  - ProcessId
+  - ParentProcessId
