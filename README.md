@@ -111,12 +111,12 @@ See [Hands-On Labs](13-Hands-On-Labs/README.md) for scenario cards and expected 
 | [02-Network-Security](02-Network-Security/README.md) | TCP/IP, DNS, HTTP(S), firewall, proxy and flow analysis |
 | [03-SIEM-Splunk](03-SIEM-Splunk/README.md) | SPL patterns, searches, pivots and troubleshooting |
 | [04-SIEM-Wazuh](04-SIEM-Wazuh/README.md) | Wazuh components, rules, alerts and triage |
-| [05-Threat-Hunting](05-Threat-Hunting/README.md) | Hypothesis-driven hunts and evidence pivots |
+| [05-Threat-Hunting](05-Threat-Hunting/README.md) | Hypothesis-driven hunts, baselines and evidence pivots |
 | [06-Windows-Logs-Sysmon](06-Windows-Logs-Sysmon/README.md) | Windows Security logs, Sysmon and process analysis |
-| [05-Threat-Hunting](05-Threat-Hunting/README.md) | Hunt lifecycle, hypothesis, pivots and findings |
 | [07-Detection-Engineering](07-Detection-Engineering/README.md) | Rule lifecycle, quality, testing and tuning |
 | [08-Incident-Response](08-Incident-Response/README.md) | Containment, escalation, communications and recovery |
 | [09-DFIR](09-DFIR/README.md) | Evidence, timeline, triage, acquisition and reporting |
+| [10-Threat-Intelligence](10-Threat-Intelligence/README.md) | IOC enrichment, confidence, freshness and context |
 | [11-MITRE-ATTACK](11-MITRE-ATTACK/README.md) | Tactics, techniques, evidence and coverage mapping |
 | [12-Use-Cases-Sigma-Rules](12-Use-Cases-Sigma-Rules/README.md) | Detection use cases, Sigma examples and test plans |
 | [13-Hands-On-Labs](13-Hands-On-Labs/README.md) | Safe scenario-based practice |
