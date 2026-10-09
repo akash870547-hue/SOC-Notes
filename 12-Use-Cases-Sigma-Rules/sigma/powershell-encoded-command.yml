@@ -17,8 +17,8 @@ logsource:
 detection:
   selection_image:
     Image|endswith:
-      - '\\powershell.exe'
-      - '\\pwsh.exe'
+      - '\powershell.exe'
+      - '\pwsh.exe'
   selection_flag:
     CommandLine|contains:
       - ' -enc '
