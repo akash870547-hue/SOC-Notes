@@ -29,8 +29,8 @@ This repository is a growing, practical knowledge base for Security Operations C
 
 - **New to SOC?** Follow the [Analyst Path](#-the-analyst-path) in order.
 - **Working an alert?** Use the [Triage Card](#-the-60-second-triage-card), then move to the relevant topic.
-- **Writing a detection?** Start in [Detection Engineering](08-Detection-Engineering/README.md) and [Sigma Rules](12-Use-Cases-Sigma-Rules/README.md).
-- **Need investigation steps?** Open [Incident Response](09-Incident-Response/README.md) or [DFIR](10-DFIR/README.md).
+- **Writing a detection?** Start in [Detection Engineering](07-Detection-Engineering/README.md) and [Sigma Rules](12-Use-Cases-Sigma-Rules/README.md).
+- **Need investigation steps?** Open [Incident Response](08-Incident-Response/README.md) or [DFIR](09-DFIR/README.md).
 - **Preparing for interviews?** Use the [Interview Vault](14-Interview-Questions/README.md).
 
 ## ◈ The analyst path
@@ -42,9 +42,9 @@ This repository is a growing, practical knowledge base for Security Operations C
 | 01 · Orient | What does a SOC do, and what is an alert? | [SOC Fundamentals](01-SOC-Fundamentals/README.md) |
 | 02 · Read telemetry | What can network and host logs prove? | [Network Security](02-Network-Security/README.md) · [Windows & Sysmon](06-Windows-Logs-Sysmon/README.md) |
 | 03 · Query | How do I find the signal in the noise? | [Splunk](03-SIEM-Splunk/README.md) · [Wazuh](04-SIEM-Wazuh/README.md) |
-| 04 · Investigate | What happened before and after the alert? | [Threat Hunting](07-Threat-Hunting/README.md) · [MITRE ATT&CK](11-MITRE-ATTACK/README.md) |
-| 05 · Detect | Can this behavior be detected reliably? | [Detection Engineering](08-Detection-Engineering/README.md) · [Use Cases & Sigma](12-Use-Cases-Sigma-Rules/README.md) |
-| 06 · Respond | What should be contained, preserved, and communicated? | [Incident Response](09-Incident-Response/README.md) · [DFIR](10-DFIR/README.md) |
+| 04 · Investigate | What happened before and after the alert? | [Threat Hunting](05-Threat-Hunting/README.md) · [MITRE ATT&CK](11-MITRE-ATTACK/README.md) |
+| 05 · Detect | Can this behavior be detected reliably? | [Detection Engineering](07-Detection-Engineering/README.md) · [Use Cases & Sigma](12-Use-Cases-Sigma-Rules/README.md) |
+| 06 · Respond | What should be contained, preserved, and communicated? | [Incident Response](08-Incident-Response/README.md) · [DFIR](09-DFIR/README.md) |
 | 07 · Improve | What did the case teach us? | [Labs](13-Hands-On-Labs/README.md) · [Interview Vault](14-Interview-Questions/README.md) |
 
 ## ◈ The 60-second triage card
@@ -74,10 +74,10 @@ Use this as a **memory aid**, not as a replacement for your organization's runbo
 | [Splunk / SPL](03-SIEM-Splunk/README.md) | Search structure, time windows, field extraction, stats, joins and pivots |
 | [Wazuh](04-SIEM-Wazuh/README.md) | Agents, decoders, rules, alert triage and integrations |
 | [Windows & Sysmon](06-Windows-Logs-Sysmon/README.md) | Event IDs, process lineage, authentication and endpoint telemetry |
-| [Threat Hunting](07-Threat-Hunting/README.md) | Hypotheses, pivots, baselines, hunt write-ups and negative findings |
-| [Detection Engineering](08-Detection-Engineering/README.md) | Detection lifecycle, tuning, false positives, testing and coverage |
+| [Threat Hunting](05-Threat-Hunting/README.md) | Hypotheses, pivots, baselines, hunt write-ups and negative findings |
+| [Detection Engineering](07-Detection-Engineering/README.md) | Detection lifecycle, tuning, false positives, testing and coverage |
 | [Sigma & Use Cases](12-Use-Cases-Sigma-Rules/README.md) | Portable rules, use-case cards, test data and ATT&CK mapping |
-| [Threat Intelligence](11-Threat-Intelligence/README.md) | IOC handling, enrichment, confidence, freshness and context |
+| [Threat Intelligence](10-Threat-Intelligence/README.md) | IOC handling, enrichment, confidence, freshness and context |
 
 ## ◈ Lab queue
 
@@ -111,12 +111,12 @@ See [Hands-On Labs](13-Hands-On-Labs/README.md) for scenario cards and expected 
 | [02-Network-Security](02-Network-Security/README.md) | TCP/IP, DNS, HTTP(S), firewall, proxy and flow analysis |
 | [03-SIEM-Splunk](03-SIEM-Splunk/README.md) | SPL patterns, searches, pivots and troubleshooting |
 | [04-SIEM-Wazuh](04-SIEM-Wazuh/README.md) | Wazuh components, rules, alerts and triage |
-| [05-Threat-Hunting](07-Threat-Hunting/README.md) | Hypothesis-driven hunts and evidence pivots |
+| [05-Threat-Hunting](05-Threat-Hunting/README.md) | Hypothesis-driven hunts and evidence pivots |
 | [06-Windows-Logs-Sysmon](06-Windows-Logs-Sysmon/README.md) | Windows Security logs, Sysmon and process analysis |
-| [07-Threat-Hunting](07-Threat-Hunting/README.md) | Hunt lifecycle, hypothesis, pivots and findings |
-| [08-Detection-Engineering](08-Detection-Engineering/README.md) | Rule lifecycle, quality, testing and tuning |
-| [09-Incident-Response](09-Incident-Response/README.md) | Containment, escalation, communications and recovery |
-| [10-DFIR](10-DFIR/README.md) | Evidence, timeline, triage, acquisition and reporting |
+| [05-Threat-Hunting](05-Threat-Hunting/README.md) | Hunt lifecycle, hypothesis, pivots and findings |
+| [07-Detection-Engineering](07-Detection-Engineering/README.md) | Rule lifecycle, quality, testing and tuning |
+| [08-Incident-Response](08-Incident-Response/README.md) | Containment, escalation, communications and recovery |
+| [09-DFIR](09-DFIR/README.md) | Evidence, timeline, triage, acquisition and reporting |
 | [11-MITRE-ATTACK](11-MITRE-ATTACK/README.md) | Tactics, techniques, evidence and coverage mapping |
 | [12-Use-Cases-Sigma-Rules](12-Use-Cases-Sigma-Rules/README.md) | Detection use cases, Sigma examples and test plans |
 | [13-Hands-On-Labs](13-Hands-On-Labs/README.md) | Safe scenario-based practice |
