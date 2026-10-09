@@ -67,7 +67,7 @@ Raw Data ────────► Information ────────► Int
 
 * **Indicator of Compromise (IOC):**
 * *Nature:* Reactive / Post-Exploitation forensic artifact.
-* *Scenario:* Endpoint scan mein ek file milti hai jiska SHA-256 hash `d41d8cd98f...` hai, jo VirusTotal par known Emotet malware ke roop mein flagged hai.
+* *Scenario:* Endpoint par ek file ka SHA-256 calculate hua, aur analyst hash ko reputation source par check karta hai. Match ek lead hai—not a verdict; source freshness, sample context, detections aur endpoint telemetry ko saath evaluate karo.
 * *Limitation:* Attacker payload ka single bit change karke hash completely badal sakta hai (Hash collision avoidance).
 
 * **Indicator of Attack (IOA):**
@@ -168,7 +168,7 @@ Automated threat intelligence manual lookups ko eliminate karta hai through stan
 
 **Q2: Why is blocking file hashes considered the lowest level in the Pyramid of Pain?**
 
-* **Answer:** Modern malware authors use techniques like compilation timestamps, changing icon resources, dead-code insertion, or automated crypters/packers. These techniques alter the file's binary structure without changing its core malicious behavior, resulting in completely different MD5/SHA-256 hashes for every generated payload. Blocking static hashes provides zero protection against new variants of the exact same malware.
+* **Answer:** Modern malware authors use techniques like compilation timestamps, changing icon resources, dead-code insertion, or automated crypters/packers. These techniques alter the file's binary structure without changing its core malicious behavior, resulting in completely different MD5/SHA-256 hashes for every generated payload. A hash block can help against a known sample, but rebuilt variants may carry new hashes. Combine hash-based controls with behaviour, process lineage, network evidence and other detections.
 
 ---
 
