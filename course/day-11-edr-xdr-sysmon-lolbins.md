@@ -78,7 +78,7 @@ Record karta hai jab bhi koi process spawn hoti hai:
 * `Image`: Full path of executable (e.g., `C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe`).
 * `CommandLine`: Exact arguments executed (e.g., `powershell.exe -nop -w hidden -enc JAB...`).
 * `ParentImage`: Executable jisne is process ko start kiya (e.g., `C:\Program Files\Microsoft Office\root\Office16\WINWORD.EXE`).
-* *Critical Rule:* Agar Parent Image koi document app ya browser hai aur Child Process `cmd.exe` ya `powershell.exe` hai, toh ye high-confidence malicious activity hai.
+* *Analyst heuristic:* Agar document app ya browser `cmd.exe` / `powershell.exe` spawn kare, toh investigate karne layak suspicious signal hai. Parent-child pattern alone maliciousness prove nahi karta—approved add-ins, management tooling, software updates aur user context ko check karo.
 
 * `Hashes`: Automatic MD5, SHA256 hashes generated for the binary.
 
