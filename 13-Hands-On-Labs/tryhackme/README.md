@@ -18,6 +18,9 @@ This is an independent learning companion; it is **not an official TryHackMe res
 
 **No flags, room answers or active-room walkthroughs are included.** TryHackMe's current [Acceptable Use Policy](https://tryhackme.com/legal/acceptable-use-policy) prohibits publishing flags, answers, solutions or step-by-step walkthroughs for active content. Certification/exam content has separate permanent restrictions. Keep your own notes focused on concepts, evidence handling, mistakes, defensive reasoning and lessons learned; check the current policy before publishing room-specific details.
 
+
+**Room-by-room notes:** [68 separate spoiler-free study sheets](room-notes/README.md) — one page per named room, with concepts, tool reminders, an evidence worksheet and report prompts. No active-room solutions or flags.
+
 ## How to use this hub
 
 1. Open the official room and complete it yourself.

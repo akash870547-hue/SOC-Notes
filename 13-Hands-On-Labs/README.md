@@ -57,3 +57,8 @@ Produce an evidence-linked timeline and factual executive summary using the [inc
 - [ ] Benign alternatives considered
 - [ ] Limitations stated
 - [ ] Another analyst can continue from the output
+
+
+## Individual room notes
+
+The [room-by-room field-note index](tryhackme/room-notes/README.md) contains 68 separate study sheets mapped to the named SOC L1 rooms. They are conceptual and spoiler-free: no active-room answers, flags or step-by-step solutions.

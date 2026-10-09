@@ -160,3 +160,8 @@ Bring raw notes, screenshots, PDFs, commands, class notes, or rough explanations
 <sub>Defensive learning resource · Examples are illustrative unless explicitly labeled as tested.</sub>
 
 </div>
+
+
+## TryHackMe SOC Level 1 — room-by-room notes
+
+The [SOC L1 room-note collection](13-Hands-On-Labs/tryhackme/room-notes/README.md) contains 68 separate, spoiler-free field sheets. They focus on transferable analyst skills, evidence worksheets and reporting—not active-room answers or flags.
