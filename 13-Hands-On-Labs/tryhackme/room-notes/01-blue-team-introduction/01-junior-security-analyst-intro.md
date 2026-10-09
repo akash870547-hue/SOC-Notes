@@ -2,7 +2,7 @@
 
 > Independent study sheet for **Blue Team Introduction**. This page is designed to help you understand the defensive skill and document your own observations; it is **not** an answer key or a room walkthrough.
 
-**Official path:** [TryHackMe SOC Level 1](https://tryhackme.com/path/outline/soclevel1) · **Module:** Blue Team Introduction · **Sheet:** 00
+**Official path:** [TryHackMe SOC Level 1](https://tryhackme.com/path/outline/soclevel1) · **Module:** Blue Team Introduction · **Format:** field note
 
 ## Room focus
 
