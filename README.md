@@ -105,7 +105,7 @@ All examples should use **synthetic telemetry, intentionally vulnerable local la
 | L-04 · Rule validation | Test a Sigma-style detection against benign and positive samples | Test matrix + tuning notes |
 | L-05 · Incident report | Build a facts-only incident timeline | Executive summary + technical appendix |
 
-See [Hands-On Labs](13-Hands-On-Labs/README.md) for scenario cards and expected outputs.
+See [Hands-On Labs](13-Hands-On-Labs/README.md) for scenario cards and expected outputs. Starting the TryHackMe SOC L1 path? Open the [room map + bilingual field notes](13-Hands-On-Labs/tryhackme/README.md).
 
 ## ◈ Working principles
 
