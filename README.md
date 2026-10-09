@@ -28,6 +28,15 @@
 
 This repository is a growing, practical knowledge base for Security Operations Center (SOC) analysis. It is organized like an analyst's field manual: concise concepts, triage workflows, telemetry references, detection logic, investigation checklists, and reproducible labs.
 
+## ◈ Primary Course Notes — English + Hinglish
+
+**Ye main study track hai.** Detailed text notes ko day-wise chapters mein organize kiya gaya hai, explanations ko natural Hinglish touch diya hai, aur revision prompts, safer lab context aur visual guides add kiye gaye hain.
+
+➡️ **[Open the SOC Analyst L1 Course Notes](course/README.md)** · [Bilingual Glossary](resources/hinglish-glossary.md)
+
+*Source transparency:* Days 1–5 and 7–12 come from the supplied detailed text notes. Days 6 and 13 were expanded from the curriculum outline because detailed text sections for those days were not present. The supporting PDF was treated as an overview, not as a verbatim transcript.
+
+
 - **New to SOC?** Follow the [Analyst Path](#-the-analyst-path) in order.
 - **Working an alert?** Use the [Triage Card](#triage-card), then move to the relevant topic.
 - **Writing a detection?** Start in [Detection Engineering](07-Detection-Engineering/README.md) and [Sigma Rules](12-Use-Cases-Sigma-Rules/README.md).
