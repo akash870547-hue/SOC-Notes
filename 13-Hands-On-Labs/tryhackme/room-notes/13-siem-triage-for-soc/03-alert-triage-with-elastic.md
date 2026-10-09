@@ -1,66 +1,113 @@
-# Alert Triage With Elastic — SOC L1 Field Notes
+# Alert Triage With Elastic — SOC L1 Deep-Dive Notes
 
-> Independent study sheet for **SIEM Triage for SOC**. This page is designed to help you understand the defensive skill and document your own observations; it is **not** an answer key or a room walkthrough.
+> **Independent analyst companion · SIEM Triage for SOC**  
+> Technical concepts, investigation method, validation logic, safe tooling and reporting practice. This is not an official TryHackMe page and contains no room answers, flags or active-room solution steps.
 
-**Official path:** [TryHackMe SOC Level 1](https://tryhackme.com/path/outline/soclevel1) · **Module:** SIEM Triage for SOC · **Sheet:** 00
-
-## Room focus
+## 1. Learning objective
 
 Elastic search results ko fields, mappings, data view and correlated evidence ke saath assess karna.
 
-## Concepts to carry into the room
+After this topic, you should be able to explain the data source, perform a small reproducible investigation, separate observed facts from inference, consider a benign alternative, state important visibility limits and recommend a proportionate next action.
 
-- KQL is a filter language; it is not a full replacement for Elasticsearch DSL.
-- Inspect documents before aggregating and verify field types.
-- Record the time picker and data view with the query.
+## 2. Mental model
 
-## Analyst lens
+- Data model matters: index/data view, source type, parsing, normalisation, retention and ingestion latency can change results.
+- Use a narrow time window and inspect raw records before aggregation.
+- Aggregations help prioritise but can hide the event that explains a case.
+- Joins need stable keys plus time context; shared IPs and usernames can be ambiguous.
 
-- KQL/DSL used, data view, event documents, fields and time window.
-- Mapping mismatches and source ingestion delays.
+## 3. Room-specific analyst lens
 
-## A practical way to organise your own investigation
+**Focus:** Elastic search results ko fields, mappings, data view and correlated evidence ke saath assess karna.
 
-Use this as a general analyst workflow, not as a sequence of room-specific answers:
+**Technical angle:** Record data view, mapping and query language; inspect documents behind the visualisation and confirm fields exist before filtering.
 
-1. **Scope:** note the authorised lab/asset, time range, relevant identity or network entities, and the data source being examined.
-2. **Observe:** record raw evidence and query/filter details before summarising it.
-3. **Correlate:** connect records only when identifiers, timestamps and context support the relationship.
-4. **Challenge the hypothesis:** seek a benign explanation and note what evidence is missing.
-5. **Decide and communicate:** state the verdict with confidence, evidence, impact, next action and escalation owner.
+For your own lab session, answer these questions with evidence rather than memory:
 
-## Tooling / reference notes
+- Which artefact most directly supports the hypothesis, and which field matters?
+- Which benign workflow could produce a similar pattern?
+- What source or field is missing, stale or ambiguous?
+- What evidence would cause you to lower or raise confidence?
 
-Example SPL (replace the placeholder with a dataset you are authorised to query):
+## 4. Investigation workflow
 
+1. Confirm the correct index/data view and demonstrate that expected data exists in the requested window.
+2. Write the hypothesis and query, then inspect sample raw events before aggregation.
+3. Establish baseline counts by host/user/source/status/time bucket.
+4. Pivot with stable identifiers and validate timezone, nulls, data types and duplicate records.
+5. Save query, parameters, event references and limitations in the case for reproducibility.
+
+## 5. Signals, meaning and validation
+
+| Observation pattern | Why it may matter | Validate before concluding |
+|---|---|---|
+| Burst/sequence | Counts cluster in time or differ sharply for one entity. | Compare raw records, time buckets, baseline and detector intent. |
+| Cross-source link | Identity, endpoint and network events seem connected. | Validate identifiers, time alignment, ingest delay, NAT and duplicated events. |
+| Zero results | Search returned no matching rows. | Check spelling, mappings, time window, data view, permissions, retention and source health. |
+
+## 6. Tooling and analyst data
+
+Splunk starter: `index=<authorised_index> earliest=-24h | stats count by sourcetype | sort - count`. Elastic example only when ECS fields exist: `event.category: authentication and event.outcome: failure`. Inspect documents and field types first.
+
+Splunk starter:
 ```spl
-index=<authorized_index> earliest=-24h
+index=<authorised_index> earliest=-24h
 | stats count by sourcetype
 | sort - count
 ```
+Elastic example only if ECS fields are present:
+```text
+event.category: authentication and event.outcome: failure
+```
+Confirm field mappings, raw events and time range before interpreting output.
 
-Validate the index, time bounds and fields first; inspect representative raw events before relying on aggregations. For Elastic, record the data view and whether the query is KQL or DSL.
+**Reproducibility rule:** record exact query/filter, source or data view, time range/timezone, tool/version and raw event/frame/document references. Counts and dashboards help prioritise; raw evidence supports the conclusion. Use only platform-assigned labs or systems you own/are authorised to test.
 
-## Common traps
+## 7. False-positive and blind-spot review
 
-- Copying a query that uses a different field mapping.
-- Treating an empty query result as an all-clear.
+- Starting with visualisations before validating source records.
+- Copying other environment's field/index names unchanged.
+- Expanding searches without recording why or exposing unnecessary data.
 
-## Personal evidence worksheet
+Before closure, check wrong timezone, delayed ingestion, incomplete retention, non-unique join keys, duplicate records, stale enrichment, parser/schema changes and alternative legitimate workflows. An empty search result means only that the query returned no matches under its present assumptions.
 
-Fill this with **your own observations** from an authorised session. Avoid publishing flags, answers, or restricted room-specific details.
+## 8. Independent practice drill
 
-| UTC timestamp / range | Source or artefact | Observed fact (not interpretation) | Interpretation / confidence | Next pivot |
+With a synthetic CSV/lab dataset, record the base query, three raw event references, one aggregate and one limitation. Change a single filter and explain how the cohort changes.
+
+**Room-specific task:** Record data view, mapping and query language; inspect documents behind the visualisation and confirm fields exist before filtering.
+
+Produce an artefact register, one evidence-backed finding and a note describing what could not be established. Use synthetic or authorised data; do not query external targets as part of this exercise.
+
+## 9. Evidence worksheet
+
+| Time (UTC) | Source / artefact | Direct observation | Interpretation / confidence | Next pivot / owner |
 |---|---|---|---|---|
-| _Fill in_ | _Fill in_ | _Fill in_ | _Fill in_ | _Fill in_ |
+| _Your observation_ | _File/event/frame/query_ | _What the record literally shows_ | _Fact vs inference; why this confidence_ | _Testable next action_ |
+| _Corroborating item_ | _Independent source_ | _What it adds or contradicts_ | _Alternative explanation_ | _Owner / due time_ |
 
-## Write-up prompts
+## 10. Report format
 
-- What makes the result set trustworthy?
-- Which mapping or time assumption could be wrong?
+**Finding:** one plain-language sentence.  
+**Scope:** assets/users/records and bounded time range.  
+**Evidence:** source + timestamp + event/frame/document ID + query/filter.  
+**Assessment:** confirmed observation, interpretation, confidence and benign alternative.  
+**Impact:** what is affected and what remains unknown.  
+**Action:** action taken, approval boundary, next owner and success verification.  
+**Limitations:** missing logs, sampling, uncertain joins, tool constraints and follow-up evidence.
 
-When you finish, write a short report with: **summary**, **scope**, **key evidence**, **verdict and confidence**, **benign alternatives considered**, **impact**, **response or escalation**, and **limitations / next steps**. Every material conclusion should point back to a source or observation.
+**Illustrative phrasing:** “The available records show [observation] during [window]. This supports [hypothesis] with [confidence] because [corroboration]. [Alternative] remains plausible because [gap]. Next, validate [specific fact] using [source/owner] before [response decision].” Replace placeholders with your own evidence.
+
+## 11. Further reading
+
+- [Splunk stats](https://docs.splunk.com/Documentation/Splunk/latest/SearchReference/Stats)
+- [Splunk timechart](https://docs.splunk.com/Documentation/Splunk/latest/SearchReference/Timechart)
+- [Elastic KQL](https://www.elastic.co/guide/en/kibana/current/kuery-query.html)
+- [Sigma rules](https://sigmahq.io/docs/basics/rules.html)
+
+- [Official TryHackMe SOC Level 1 path](https://tryhackme.com/path/outline/soclevel1)
+- [TryHackMe Acceptable Use Policy](https://tryhackme.com/legal/acceptable-use-policy) — check the current policy and room status before publishing anything room-specific.
 
 ---
 
-**Publishing note:** TryHackMe's [Acceptable Use Policy](https://tryhackme.com/legal/acceptable-use-policy) prohibits publishing answers, flags, solutions and step-by-step walkthroughs for active content. Keep this public sheet conceptual and spoiler-free; keep your own private learning notes separate, and only publish room-specific write-ups when the room is marked retired and the policy permits it.
+**Publishing boundary:** TryHackMe's current policy prohibits publishing flags, answers, solutions and step-by-step walkthroughs for active content; certification/exam content has separate permanent restrictions. Keep public notes conceptual and spoiler-free, and record your own observations separately.

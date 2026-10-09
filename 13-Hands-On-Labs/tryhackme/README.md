@@ -21,6 +21,8 @@ This is an independent learning companion; it is **not an official TryHackMe res
 
 **Room-by-room notes:** [68 separate spoiler-free study sheets](room-notes/README.md) — one page per named room, with concepts, tool reminders, an evidence worksheet and report prompts. No active-room solutions or flags.
 
+**Deep-dive guides:** [Open all 68 room-by-room analyst guides](room-notes/README.md). Each page now includes a technical mental model, investigation workflow, validation patterns, tooling examples, false-positive checks, evidence worksheets and authoritative reading.
+
 ## How to use this hub
 
 1. Open the official room and complete it yourself.

@@ -1,64 +1,106 @@
-# Windows Logging for SOC — SOC L1 Field Notes
+# Windows Logging for SOC — SOC L1 Deep-Dive Notes
 
-> Independent study sheet for **Windows Security Monitoring**. This page is designed to help you understand the defensive skill and document your own observations; it is **not** an answer key or a room walkthrough.
+> **Independent analyst companion · Windows Security Monitoring**  
+> Technical concepts, investigation method, validation logic, safe tooling and reporting practice. This is not an official TryHackMe page and contains no room answers, flags or active-room solution steps.
 
-**Official path:** [TryHackMe SOC Level 1](https://tryhackme.com/path/outline/soclevel1) · **Module:** Windows Security Monitoring · **Sheet:** 00
-
-## Room focus
+## 1. Learning objective
 
 Windows event channels, providers, logon/process context and event-time semantics ka foundation banana.
 
-## Concepts to carry into the room
+After this topic, you should be able to explain the data source, perform a small reproducible investigation, separate observed facts from inference, consider a benign alternative, state important visibility limits and recommend a proportionate next action.
 
-- Security, System, application and Sysmon telemetry cover different sources.
-- Event IDs require context, version and fields; never rely on ID alone.
-- Log retention, forwarding and clock skew can create blind spots.
+## 2. Mental model
 
-## Analyst lens
+- Event 4624 records successful logon and 4625 failed logon; account, source, logon type and host context matter.
+- Event 4688 can record process creation when configured; command-line visibility depends on policy and collection.
+- Sysmon provides configurable telemetry, so absence of an event may be a collection/configuration issue.
+- Separate event time from ingestion time; check OS version, time zone, retention and sensor health.
 
-- Channel/provider, event ID, account, host, process, source address and UTC timestamp.
-- Adjacent events and log-collection health.
+## 3. Room-specific analyst lens
 
-## A practical way to organise your own investigation
+**Focus:** Windows event channels, providers, logon/process context and event-time semantics ka foundation banana.
 
-Use this as a general analyst workflow, not as a sequence of room-specific answers:
+**Technical angle:** Capture channel/provider, full event fields, audit policy and ingest time. Event documentation provides meaning beyond the numeric ID.
 
-1. **Scope:** note the authorised lab/asset, time range, relevant identity or network entities, and the data source being examined.
-2. **Observe:** record raw evidence and query/filter details before summarising it.
-3. **Correlate:** connect records only when identifiers, timestamps and context support the relationship.
-4. **Challenge the hypothesis:** seek a benign explanation and note what evidence is missing.
-5. **Decide and communicate:** state the verdict with confidence, evidence, impact, next action and escalation owner.
+For your own lab session, answer these questions with evidence rather than memory:
 
-## Tooling / reference notes
+- Which artefact most directly supports the hypothesis, and which field matters?
+- Which benign workflow could produce a similar pattern?
+- What source or field is missing, stale or ambiguous?
+- What evidence would cause you to lower or raise confidence?
 
-Example read-only query against a host you administer:
+## 4. Investigation workflow
 
+1. Confirm host, channel/provider, event/ingestion time, audit policy and expected source coverage.
+2. Inspect full event fields/XML: SID/name, logon type, source, process/parent identifiers and available command line.
+3. Correlate authentication, process starts, task/service changes, DNS/network and privilege events.
+4. Build a short UTC timeline; compare with RMM, service accounts, scheduled tasks and maintenance.
+5. Report the strongest direct observation, missing telemetry and approved escalation/containment path.
+
+## 5. Signals, meaning and validation
+
+| Observation pattern | Why it may matter | Validate before concluding |
+|---|---|---|
+| Failure burst then success | Password guessing, stale credentials or ordinary mistyping may fit. | Check source, account diversity, MFA, logon type, lockout and nearby host/identity events. |
+| Unusual process tree | Known executable appears with unusual parent, user, path or follow-on network. | Validate full path/signature, command line, parent, prevalence and business workflow. |
+| Missing events | Expected event type is absent or delayed. | Inspect audit policy, Sysmon config, agent health, forwarding and clock drift. |
+
+## 6. Tooling and analyst data
+
+Read-only PowerShell starter on a host you administer: `Get-WinEvent -FilterHashtable @{ LogName='Security'; StartTime=(Get-Date).AddHours(-24) } -MaxEvents 100`. Scope the window and inspect raw fields before drawing conclusions.
+
+Read-only PowerShell starter for a host you administer:
 ```powershell
-Get-WinEvent -FilterHashtable @{ LogName = 'Security'; StartTime = (Get-Date).AddHours(-24) } -MaxEvents 100
+Get-WinEvent -FilterHashtable @{ LogName='Security'; StartTime=(Get-Date).AddHours(-24) } -MaxEvents 100
 ```
 
-Capture the host, query window and relevant event fields. Event IDs and available fields depend on audit policy, OS version and telemetry configuration.
+**Reproducibility rule:** record exact query/filter, source or data view, time range/timezone, tool/version and raw event/frame/document references. Counts and dashboards help prioritise; raw evidence supports the conclusion. Use only platform-assigned labs or systems you own/are authorised to test.
 
-## Common traps
+## 7. False-positive and blind-spot review
 
-- Treating a missing event as proof that an action did not occur.
-- Confusing event record time with ingestion time.
+- Memorising event IDs without field/context interpretation.
+- Treating missing logs as proof no event occurred.
+- Joining only on PID over long intervals without host/start context or process GUID.
 
-## Personal evidence worksheet
+Before closure, check wrong timezone, delayed ingestion, incomplete retention, non-unique join keys, duplicate records, stale enrichment, parser/schema changes and alternative legitimate workflows. An empty search result means only that the query returned no matches under its present assumptions.
 
-Fill this with **your own observations** from an authorised session. Avoid publishing flags, answers, or restricted room-specific details.
+## 8. Independent practice drill
 
-| UTC timestamp / range | Source or artefact | Observed fact (not interpretation) | Interpretation / confidence | Next pivot |
+On an authorised Windows VM, review a bounded event window, preserve two complete event references and compare normal vs suspicious hypotheses. Do not alter audit settings or enact response without approval.
+
+**Room-specific task:** Capture channel/provider, full event fields, audit policy and ingest time. Event documentation provides meaning beyond the numeric ID.
+
+Produce an artefact register, one evidence-backed finding and a note describing what could not be established. Use synthetic or authorised data; do not query external targets as part of this exercise.
+
+## 9. Evidence worksheet
+
+| Time (UTC) | Source / artefact | Direct observation | Interpretation / confidence | Next pivot / owner |
 |---|---|---|---|---|
-| _Fill in_ | _Fill in_ | _Fill in_ | _Fill in_ | _Fill in_ |
+| _Your observation_ | _File/event/frame/query_ | _What the record literally shows_ | _Fact vs inference; why this confidence_ | _Testable next action_ |
+| _Corroborating item_ | _Independent source_ | _What it adds or contradicts_ | _Alternative explanation_ | _Owner / due time_ |
 
-## Write-up prompts
+## 10. Report format
 
-- Which channel is authoritative for this question?
-- What telemetry gap limits the conclusion?
+**Finding:** one plain-language sentence.  
+**Scope:** assets/users/records and bounded time range.  
+**Evidence:** source + timestamp + event/frame/document ID + query/filter.  
+**Assessment:** confirmed observation, interpretation, confidence and benign alternative.  
+**Impact:** what is affected and what remains unknown.  
+**Action:** action taken, approval boundary, next owner and success verification.  
+**Limitations:** missing logs, sampling, uncertain joins, tool constraints and follow-up evidence.
 
-When you finish, write a short report with: **summary**, **scope**, **key evidence**, **verdict and confidence**, **benign alternatives considered**, **impact**, **response or escalation**, and **limitations / next steps**. Every material conclusion should point back to a source or observation.
+**Illustrative phrasing:** “The available records show [observation] during [window]. This supports [hypothesis] with [confidence] because [corroboration]. [Alternative] remains plausible because [gap]. Next, validate [specific fact] using [source/owner] before [response decision].” Replace placeholders with your own evidence.
+
+## 11. Further reading
+
+- [Microsoft Event 4624](https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4624)
+- [Microsoft Event 4625](https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4625)
+- [Microsoft Event 4688](https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4688)
+- [Microsoft Sysmon](https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon)
+
+- [Official TryHackMe SOC Level 1 path](https://tryhackme.com/path/outline/soclevel1)
+- [TryHackMe Acceptable Use Policy](https://tryhackme.com/legal/acceptable-use-policy) — check the current policy and room status before publishing anything room-specific.
 
 ---
 
-**Publishing note:** TryHackMe's [Acceptable Use Policy](https://tryhackme.com/legal/acceptable-use-policy) prohibits publishing answers, flags, solutions and step-by-step walkthroughs for active content. Keep this public sheet conceptual and spoiler-free; keep your own private learning notes separate, and only publish room-specific write-ups when the room is marked retired and the policy permits it.
+**Publishing boundary:** TryHackMe's current policy prohibits publishing flags, answers, solutions and step-by-step walkthroughs for active content; certification/exam content has separate permanent restrictions. Keep public notes conceptual and spoiler-free, and record your own observations separately.

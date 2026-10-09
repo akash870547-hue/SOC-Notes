@@ -1,58 +1,102 @@
-# Cyber Kill Chain — SOC L1 Field Notes
+# Cyber Kill Chain — SOC L1 Deep-Dive Notes
 
-> Independent study sheet for **Cyber Defence Frameworks**. This page is designed to help you understand the defensive skill and document your own observations; it is **not** an answer key or a room walkthrough.
+> **Independent analyst companion · Cyber Defence Frameworks**  
+> Technical concepts, investigation method, validation logic, safe tooling and reporting practice. This is not an official TryHackMe page and contains no room answers, flags or active-room solution steps.
 
-**Official path:** [TryHackMe SOC Level 1](https://tryhackme.com/path/outline/soclevel1) · **Module:** Cyber Defence Frameworks · **Sheet:** 00
-
-## Room focus
+## 1. Learning objective
 
 Observed activity ko high-level attack lifecycle ke stages ke saath map karna.
 
-## Concepts to carry into the room
+After this topic, you should be able to explain the data source, perform a small reproducible investigation, separate observed facts from inference, consider a benign alternative, state important visibility limits and recommend a proportionate next action.
 
-- Stages support communication but real intrusions can skip or repeat them.
-- A stage hypothesis needs a specific observable artifact.
-- Defenders can disrupt activity at multiple points, not just the first alert.
+## 2. Mental model
 
-## Analyst lens
+- Pyramid of Pain compares how costly indicator categories may be to change; context and defender visibility determine operational value.
+- Kill-chain models organise possible phases, but real intrusions can skip, repeat or overlap stages.
+- ATT&CK tactics describe goals and techniques describe behaviours; a mapping is a hypothesis, not attribution.
+- Begin with observed behaviour. Framework terminology cannot prove an event or fill a telemetry gap.
 
-- Events supporting a possible stage, event time, asset and alternative explanation.
-- Detection/prevention opportunity and evidence gaps.
+## 3. Room-specific analyst lens
 
-## A practical way to organise your own investigation
+**Focus:** Observed activity ko high-level attack lifecycle ke stages ke saath map karna.
 
-Use this as a general analyst workflow, not as a sequence of room-specific answers:
+**Technical angle:** Map only observed evidence to a phase; real activity may skip, repeat or overlap stages. Add a control opportunity for each supported stage.
 
-1. **Scope:** note the authorised lab/asset, time range, relevant identity or network entities, and the data source being examined.
-2. **Observe:** record raw evidence and query/filter details before summarising it.
-3. **Correlate:** connect records only when identifiers, timestamps and context support the relationship.
-4. **Challenge the hypothesis:** seek a benign explanation and note what evidence is missing.
-5. **Decide and communicate:** state the verdict with confidence, evidence, impact, next action and escalation owner.
+For your own lab session, answer these questions with evidence rather than memory:
 
-## Tooling / reference notes
+- Which artefact most directly supports the hypothesis, and which field matters?
+- Which benign workflow could produce a similar pattern?
+- What source or field is missing, stale or ambiguous?
+- What evidence would cause you to lower or raise confidence?
 
-Use a compact mapping table: observed behaviour → supporting artefact → framework phase/technique hypothesis → confidence → detection/control opportunity. Link the exact behaviour, not just the tool or alert label.
+## 4. Investigation workflow
 
-## Common traps
+1. Describe the observed behaviour in plain language without framework vocabulary.
+2. Attach the source artefact, timestamp, entities and relevant fields.
+3. Choose the narrowest plausible phase/technique and record alternative mappings.
+4. Check that the technique's described behaviour matches the evidence and note framework version.
+5. Map a defensive opportunity and the visibility gap that stops stronger confirmation.
 
-- Forcing every event into one neat linear sequence.
-- Claiming a stage based solely on an alert label.
+## 5. Signals, meaning and validation
 
-## Personal evidence worksheet
+| Observation pattern | Why it may matter | Validate before concluding |
+|---|---|---|
+| Indicator match | A hash/domain/IP can provide a useful pivot. | Check freshness, source quality, shared infrastructure and local contact. |
+| Technique-like behaviour | A sequence resembles a known adversary behaviour. | Name the observable behaviour and required telemetry; do not map from tool name alone. |
+| Coverage gap | No reliable data source detects a behaviour. | Record required telemetry, cost, privacy implications and validation plan. |
 
-Fill this with **your own observations** from an authorised session. Avoid publishing flags, answers, or restricted room-specific details.
+## 6. Tooling and analyst data
 
-| UTC timestamp / range | Source or artefact | Observed fact (not interpretation) | Interpretation / confidence | Next pivot |
+Mapping record: observed behaviour → artefact → candidate phase/technique → confidence → benign alternative → telemetry gap → defensive opportunity.
+
+Framework evidence record: observed behaviour → source artefact → candidate technique/phase → confidence → benign alternative → visibility gap → defensive opportunity.
+
+**Reproducibility rule:** record exact query/filter, source or data view, time range/timezone, tool/version and raw event/frame/document references. Counts and dashboards help prioritise; raw evidence supports the conclusion. Use only platform-assigned labs or systems you own/are authorised to test.
+
+## 7. False-positive and blind-spot review
+
+- Mapping many techniques to inflate perceived sophistication.
+- Using a framework label as proof or actor attribution.
+- Ranking indicators mechanically without local false-positive and visibility context.
+
+Before closure, check wrong timezone, delayed ingestion, incomplete retention, non-unique join keys, duplicate records, stale enrichment, parser/schema changes and alternative legitimate workflows. An empty search result means only that the query returned no matches under its present assumptions.
+
+## 8. Independent practice drill
+
+Map a synthetic admin sequence only as far as the evidence supports. Mark an expected but unobserved phase as unknown and name a data source that could test it.
+
+**Room-specific task:** Map only observed evidence to a phase; real activity may skip, repeat or overlap stages. Add a control opportunity for each supported stage.
+
+Produce an artefact register, one evidence-backed finding and a note describing what could not be established. Use synthetic or authorised data; do not query external targets as part of this exercise.
+
+## 9. Evidence worksheet
+
+| Time (UTC) | Source / artefact | Direct observation | Interpretation / confidence | Next pivot / owner |
 |---|---|---|---|---|
-| _Fill in_ | _Fill in_ | _Fill in_ | _Fill in_ | _Fill in_ |
+| _Your observation_ | _File/event/frame/query_ | _What the record literally shows_ | _Fact vs inference; why this confidence_ | _Testable next action_ |
+| _Corroborating item_ | _Independent source_ | _What it adds or contradicts_ | _Alternative explanation_ | _Owner / due time_ |
 
-## Write-up prompts
+## 10. Report format
 
-- What observation justifies the stage mapping?
-- Where could a defensive control interrupt the chain?
+**Finding:** one plain-language sentence.  
+**Scope:** assets/users/records and bounded time range.  
+**Evidence:** source + timestamp + event/frame/document ID + query/filter.  
+**Assessment:** confirmed observation, interpretation, confidence and benign alternative.  
+**Impact:** what is affected and what remains unknown.  
+**Action:** action taken, approval boundary, next owner and success verification.  
+**Limitations:** missing logs, sampling, uncertain joins, tool constraints and follow-up evidence.
 
-When you finish, write a short report with: **summary**, **scope**, **key evidence**, **verdict and confidence**, **benign alternatives considered**, **impact**, **response or escalation**, and **limitations / next steps**. Every material conclusion should point back to a source or observation.
+**Illustrative phrasing:** “The available records show [observation] during [window]. This supports [hypothesis] with [confidence] because [corroboration]. [Alternative] remains plausible because [gap]. Next, validate [specific fact] using [source/owner] before [response decision].” Replace placeholders with your own evidence.
+
+## 11. Further reading
+
+- [MITRE ATT&CK techniques](https://attack.mitre.org/techniques/)
+- [Sigma rules documentation](https://sigmahq.io/docs/basics/rules.html)
+- [Cyber Kill Chain overview](https://www.lockheedmartin.com/content/dam/lockheed-martin/rms/documents/cyber/Cyber-Kill-Chain.pdf)
+
+- [Official TryHackMe SOC Level 1 path](https://tryhackme.com/path/outline/soclevel1)
+- [TryHackMe Acceptable Use Policy](https://tryhackme.com/legal/acceptable-use-policy) — check the current policy and room status before publishing anything room-specific.
 
 ---
 
-**Publishing note:** TryHackMe's [Acceptable Use Policy](https://tryhackme.com/legal/acceptable-use-policy) prohibits publishing answers, flags, solutions and step-by-step walkthroughs for active content. Keep this public sheet conceptual and spoiler-free; keep your own private learning notes separate, and only publish room-specific write-ups when the room is marked retired and the policy permits it.
+**Publishing boundary:** TryHackMe's current policy prohibits publishing flags, answers, solutions and step-by-step walkthroughs for active content; certification/exam content has separate permanent restrictions. Keep public notes conceptual and spoiler-free, and record your own observations separately.

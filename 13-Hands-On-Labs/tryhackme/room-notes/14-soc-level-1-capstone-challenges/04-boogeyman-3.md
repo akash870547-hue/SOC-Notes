@@ -1,58 +1,101 @@
-# Boogeyman 3 — SOC L1 Field Notes
+# Boogeyman 3 — SOC L1 Deep-Dive Notes
 
-> Independent study sheet for **SOC Level 1 Capstone Challenges**. This page is designed to help you understand the defensive skill and document your own observations; it is **not** an answer key or a room walkthrough.
+> **Independent analyst companion · SOC Level 1 Capstone Challenges**  
+> Technical concepts, investigation method, validation logic, safe tooling and reporting practice. This is not an official TryHackMe page and contains no room answers, flags or active-room solution steps.
 
-**Official path:** [TryHackMe SOC Level 1](https://tryhackme.com/path/outline/soclevel1) · **Module:** SOC Level 1 Capstone Challenges · **Sheet:** 00
-
-## Room focus
+## 1. Learning objective
 
 Multi-stage case ko coherent report with confidence, impact and response decision points mein close karna.
 
-## Concepts to carry into the room
+After this topic, you should be able to explain the data source, perform a small reproducible investigation, separate observed facts from inference, consider a benign alternative, state important visibility limits and recommend a proportionate next action.
 
-- Timeline order is not automatically causality or attribution.
-- Containment and recovery need explicit ownership and verification.
-- A useful closeout includes detection gaps and lessons learned.
+## 2. Mental model
 
-## Analyst lens
+- A timeline orders observations; it does not automatically prove causality or attribution.
+- Entity relationships require stable identifiers, timing and independent corroboration.
+- Keep facts, hypotheses and unknowns separate; confidence changes only when evidence supports it.
+- A final report includes residual risk, evidence gaps, recovery verification and follow-up owners.
 
-- Confirmed timeline, impact scope, containment/recovery actions and verification evidence.
-- Residual risk, detection improvement and open tasks.
+## 3. Room-specific analyst lens
 
-## A practical way to organise your own investigation
+**Focus:** Multi-stage case ko coherent report with confidence, impact and response decision points mein close karna.
 
-Use this as a general analyst workflow, not as a sequence of room-specific answers:
+**Technical angle:** Verify containment/eradication/recovery success; add recurrence monitoring, detection gaps and a named residual-risk owner.
 
-1. **Scope:** note the authorised lab/asset, time range, relevant identity or network entities, and the data source being examined.
-2. **Observe:** record raw evidence and query/filter details before summarising it.
-3. **Correlate:** connect records only when identifiers, timestamps and context support the relationship.
-4. **Challenge the hypothesis:** seek a benign explanation and note what evidence is missing.
-5. **Decide and communicate:** state the verdict with confidence, evidence, impact, next action and escalation owner.
+For your own lab session, answer these questions with evidence rather than memory:
 
-## Tooling / reference notes
+- Which artefact most directly supports the hypothesis, and which field matters?
+- Which benign workflow could produce a similar pattern?
+- What source or field is missing, stale or ambiguous?
+- What evidence would cause you to lower or raise confidence?
 
-Use one timeline row per material observation: UTC time | artefact/source | observed fact | interpretation | confidence | next action. Close with scope, impact, containment/recovery status, evidence gaps, detection opportunities and owner for each follow-up.
+## 4. Investigation workflow
 
-## Common traps
+1. Define authorised scope and inventory artefacts, sources, collection time and limitations.
+2. Normalise time to UTC while preserving original timestamp and timezone.
+3. Create one timeline row per material observation with direct source references.
+4. Build an entity map linking identities, hosts, processes, network destinations and files; label inferred links.
+5. Assess impact and alternatives; record evidence that contradicts the initial theory.
+6. Report summary, technical timeline, scope, verdict/confidence, actions, gaps and recovery verification.
 
-- Declaring complete remediation without validation.
-- Omitting follow-up monitoring and control improvements.
+## 5. Signals, meaning and validation
 
-## Personal evidence worksheet
+| Observation pattern | Why it may matter | Validate before concluding |
+|---|---|---|
+| Incomplete chain | Some phases are observed and others inferred. | Label direct evidence, strong inference and unresolved questions separately. |
+| Scope expansion | An entity appears in multiple artefacts. | Check uniqueness/reuse and record why the pivot is justified. |
+| Recovery claim | An action is marked complete. | Verify actual control state, affected scope and recurrence monitoring. |
 
-Fill this with **your own observations** from an authorised session. Avoid publishing flags, answers, or restricted room-specific details.
+## 6. Tooling and analyst data
 
-| UTC timestamp / range | Source or artefact | Observed fact (not interpretation) | Interpretation / confidence | Next pivot |
+Report format: executive summary → scope/method → UTC timeline → source evidence → affected entities/impact → verdict/confidence → authorised actions → limitations/residual risk → detection improvements → owner/due date.
+
+**Reproducibility rule:** record exact query/filter, source or data view, time range/timezone, tool/version and raw event/frame/document references. Counts and dashboards help prioritise; raw evidence supports the conclusion. Use only platform-assigned labs or systems you own/are authorised to test.
+
+## 7. False-positive and blind-spot review
+
+- A compelling narrative with no traceable artefact references.
+- Counting duplicated telemetry as independent corroboration.
+- Declaring remediation complete without verification or assigned residual-risk owner.
+
+Before closure, check wrong timezone, delayed ingestion, incomplete retention, non-unique join keys, duplicate records, stale enrichment, parser/schema changes and alternative legitimate workflows. An empty search result means only that the query returned no matches under its present assumptions.
+
+## 8. Independent practice drill
+
+Build a fictional dossier of six synthetic events across two sources. Create a UTC timeline, label one uncertain relationship, suggest one proportionate action and specify how its success is verified.
+
+**Room-specific task:** Verify containment/eradication/recovery success; add recurrence monitoring, detection gaps and a named residual-risk owner.
+
+Produce an artefact register, one evidence-backed finding and a note describing what could not be established. Use synthetic or authorised data; do not query external targets as part of this exercise.
+
+## 9. Evidence worksheet
+
+| Time (UTC) | Source / artefact | Direct observation | Interpretation / confidence | Next pivot / owner |
 |---|---|---|---|---|
-| _Fill in_ | _Fill in_ | _Fill in_ | _Fill in_ | _Fill in_ |
+| _Your observation_ | _File/event/frame/query_ | _What the record literally shows_ | _Fact vs inference; why this confidence_ | _Testable next action_ |
+| _Corroborating item_ | _Independent source_ | _What it adds or contradicts_ | _Alternative explanation_ | _Owner / due time_ |
 
-## Write-up prompts
+## 10. Report format
 
-- Which evidence supports closure?
-- What should be monitored after recovery?
+**Finding:** one plain-language sentence.  
+**Scope:** assets/users/records and bounded time range.  
+**Evidence:** source + timestamp + event/frame/document ID + query/filter.  
+**Assessment:** confirmed observation, interpretation, confidence and benign alternative.  
+**Impact:** what is affected and what remains unknown.  
+**Action:** action taken, approval boundary, next owner and success verification.  
+**Limitations:** missing logs, sampling, uncertain joins, tool constraints and follow-up evidence.
 
-When you finish, write a short report with: **summary**, **scope**, **key evidence**, **verdict and confidence**, **benign alternatives considered**, **impact**, **response or escalation**, and **limitations / next steps**. Every material conclusion should point back to a source or observation.
+**Illustrative phrasing:** “The available records show [observation] during [window]. This supports [hypothesis] with [confidence] because [corroboration]. [Alternative] remains plausible because [gap]. Next, validate [specific fact] using [source/owner] before [response decision].” Replace placeholders with your own evidence.
+
+## 11. Further reading
+
+- [NIST SP 800-61 Rev. 3](https://csrc.nist.gov/pubs/sp/800/61/r3/final)
+- [OWASP Logging Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html)
+- [NIST CSF 2.0](https://www.nist.gov/cyberframework)
+
+- [Official TryHackMe SOC Level 1 path](https://tryhackme.com/path/outline/soclevel1)
+- [TryHackMe Acceptable Use Policy](https://tryhackme.com/legal/acceptable-use-policy) — check the current policy and room status before publishing anything room-specific.
 
 ---
 
-**Publishing note:** TryHackMe's [Acceptable Use Policy](https://tryhackme.com/legal/acceptable-use-policy) prohibits publishing answers, flags, solutions and step-by-step walkthroughs for active content. Keep this public sheet conceptual and spoiler-free; keep your own private learning notes separate, and only publish room-specific write-ups when the room is marked retired and the policy permits it.
+**Publishing boundary:** TryHackMe's current policy prohibits publishing flags, answers, solutions and step-by-step walkthroughs for active content; certification/exam content has separate permanent restrictions. Keep public notes conceptual and spoiler-free, and record your own observations separately.

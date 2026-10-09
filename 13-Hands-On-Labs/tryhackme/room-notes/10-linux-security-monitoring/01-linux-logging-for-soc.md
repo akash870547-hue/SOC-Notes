@@ -1,65 +1,108 @@
-# Linux Logging for SOC — SOC L1 Field Notes
+# Linux Logging for SOC — SOC L1 Deep-Dive Notes
 
-> Independent study sheet for **Linux Security Monitoring**. This page is designed to help you understand the defensive skill and document your own observations; it is **not** an answer key or a room walkthrough.
+> **Independent analyst companion · Linux Security Monitoring**  
+> Technical concepts, investigation method, validation logic, safe tooling and reporting practice. This is not an official TryHackMe page and contains no room answers, flags or active-room solution steps.
 
-**Official path:** [TryHackMe SOC Level 1](https://tryhackme.com/path/outline/soclevel1) · **Module:** Linux Security Monitoring · **Sheet:** 00
-
-## Room focus
+## 1. Learning objective
 
 Authentication, systemd journal, sudo and service logs ki source and reliability samajhna.
 
-## Concepts to carry into the room
+After this topic, you should be able to explain the data source, perform a small reproducible investigation, separate observed facts from inference, consider a benign alternative, state important visibility limits and recommend a proportionate next action.
 
-- Different distributions store logs in different locations and formats.
-- Authentication messages need user, source, service and time context.
-- journald retention and forwarding configuration affect visibility.
+## 2. Mental model
 
-## Analyst lens
+- Authentication files, journald, auditd, service logs and EDR provide different evidence types.
+- Distribution and logging configuration determine file paths, fields, retention and forwarding.
+- SSH, sudo, new users/keys, service changes and outbound process activity must be compared with legitimate automation.
+- A missing path or empty query is a visibility observation, not proof that activity did not occur.
 
-- Auth events, sudo records, journal unit, hostname, UID and timestamp.
-- Collection configuration and time sync.
+## 3. Room-specific analyst lens
 
-## A practical way to organise your own investigation
+**Focus:** Authentication, systemd journal, sudo and service logs ki source and reliability samajhna.
 
-Use this as a general analyst workflow, not as a sequence of room-specific answers:
+**Technical angle:** Identify distribution/logging design first; journald, classic log files and auditd are not interchangeable.
 
-1. **Scope:** note the authorised lab/asset, time range, relevant identity or network entities, and the data source being examined.
-2. **Observe:** record raw evidence and query/filter details before summarising it.
-3. **Correlate:** connect records only when identifiers, timestamps and context support the relationship.
-4. **Challenge the hypothesis:** seek a benign explanation and note what evidence is missing.
-5. **Decide and communicate:** state the verdict with confidence, evidence, impact, next action and escalation owner.
+For your own lab session, answer these questions with evidence rather than memory:
 
-## Tooling / reference notes
+- Which artefact most directly supports the hypothesis, and which field matters?
+- Which benign workflow could produce a similar pattern?
+- What source or field is missing, stale or ambiguous?
+- What evidence would cause you to lower or raise confidence?
 
-Read-only local triage examples:
+## 4. Investigation workflow
 
+1. Record hostname, distribution, timezone, query time and privilege context; avoid changing state during evidence collection.
+2. Confirm whether logs are in journald, classic files, auditd or a central forwarder.
+3. Search a bounded interval for authentication, privilege and service-change records.
+4. Correlate UID/user, source IP, process ID, command, unit name, file metadata and network endpoints.
+5. Check rotation, forwarder status, containers and approved automation; state the limitations explicitly.
+
+## 5. Signals, meaning and validation
+
+| Observation pattern | Why it may matter | Validate before concluding |
+|---|---|---|
+| Auth anomaly | Repeated failures or unusual successful login. | Check bastion, NAT, SSH keys/MFA, user schedule, source and following commands. |
+| Privilege/service change | sudo, new unit/user/key or scheduler change. | Correlate audit/process logs, package manager, change ticket and admin ownership. |
+| Possible persistence | New scheduled job or startup artifact behaves unexpectedly. | Preserve owner, hash, mode and timestamps; compare deployment baseline. |
+
+## 6. Tooling and analyst data
+
+Read-only examples: `journalctl --since '24 hours ago'`; on systems that use it, `grep -E 'Failed password|Accepted password' /var/log/auth.log`. Confirm distro, permissions and source first; no output is not an all-clear.
+
+Read-only local examples:
 ```bash
-journalctl --since "24 hours ago"
+journalctl --since '24 hours ago'
+# Only on systems that use this path:
 grep -E 'Failed password|Accepted password' /var/log/auth.log
 ```
 
-Log paths differ across distributions and may require privileges; preserve timestamps and note rotation/forwarding gaps.
+**Reproducibility rule:** record exact query/filter, source or data view, time range/timezone, tool/version and raw event/frame/document references. Counts and dashboards help prioritise; raw evidence supports the conclusion. Use only platform-assigned labs or systems you own/are authorised to test.
 
-## Common traps
+## 7. False-positive and blind-spot review
 
-- Assuming every distro uses identical log paths.
-- Treating missing auth logs as no login activity.
+- Assuming every distribution has `/var/log/auth.log`.
+- Executing suspicious binaries or deleting artefacts during triage.
+- Ignoring cloud-init, containers, configuration management and ephemeral hosts.
 
-## Personal evidence worksheet
+Before closure, check wrong timezone, delayed ingestion, incomplete retention, non-unique join keys, duplicate records, stale enrichment, parser/schema changes and alternative legitimate workflows. An empty search result means only that the query returned no matches under its present assumptions.
 
-Fill this with **your own observations** from an authorised session. Avoid publishing flags, answers, or restricted room-specific details.
+## 8. Independent practice drill
 
-| UTC timestamp / range | Source or artefact | Observed fact (not interpretation) | Interpretation / confidence | Next pivot |
+On a Linux VM you own, compare journal output with the configured auth log and note field/time/retention differences. Keep the test read-only.
+
+**Room-specific task:** Identify distribution/logging design first; journald, classic log files and auditd are not interchangeable.
+
+Produce an artefact register, one evidence-backed finding and a note describing what could not be established. Use synthetic or authorised data; do not query external targets as part of this exercise.
+
+## 9. Evidence worksheet
+
+| Time (UTC) | Source / artefact | Direct observation | Interpretation / confidence | Next pivot / owner |
 |---|---|---|---|---|
-| _Fill in_ | _Fill in_ | _Fill in_ | _Fill in_ | _Fill in_ |
+| _Your observation_ | _File/event/frame/query_ | _What the record literally shows_ | _Fact vs inference; why this confidence_ | _Testable next action_ |
+| _Corroborating item_ | _Independent source_ | _What it adds or contradicts_ | _Alternative explanation_ | _Owner / due time_ |
 
-## Write-up prompts
+## 10. Report format
 
-- Which source records the event on this host?
-- Could log rotation or forwarding explain missing data?
+**Finding:** one plain-language sentence.  
+**Scope:** assets/users/records and bounded time range.  
+**Evidence:** source + timestamp + event/frame/document ID + query/filter.  
+**Assessment:** confirmed observation, interpretation, confidence and benign alternative.  
+**Impact:** what is affected and what remains unknown.  
+**Action:** action taken, approval boundary, next owner and success verification.  
+**Limitations:** missing logs, sampling, uncertain joins, tool constraints and follow-up evidence.
 
-When you finish, write a short report with: **summary**, **scope**, **key evidence**, **verdict and confidence**, **benign alternatives considered**, **impact**, **response or escalation**, and **limitations / next steps**. Every material conclusion should point back to a source or observation.
+**Illustrative phrasing:** “The available records show [observation] during [window]. This supports [hypothesis] with [confidence] because [corroboration]. [Alternative] remains plausible because [gap]. Next, validate [specific fact] using [source/owner] before [response decision].” Replace placeholders with your own evidence.
+
+## 11. Further reading
+
+- [journalctl manual](https://man7.org/linux/man-pages/man1/journalctl.1.html)
+- [systemctl manual](https://man7.org/linux/man-pages/man1/systemctl.1.html)
+- [auditd manual](https://man7.org/linux/man-pages/man8/auditd.8.html)
+- [OWASP Logging Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html)
+
+- [Official TryHackMe SOC Level 1 path](https://tryhackme.com/path/outline/soclevel1)
+- [TryHackMe Acceptable Use Policy](https://tryhackme.com/legal/acceptable-use-policy) — check the current policy and room status before publishing anything room-specific.
 
 ---
 
-**Publishing note:** TryHackMe's [Acceptable Use Policy](https://tryhackme.com/legal/acceptable-use-policy) prohibits publishing answers, flags, solutions and step-by-step walkthroughs for active content. Keep this public sheet conceptual and spoiler-free; keep your own private learning notes separate, and only publish room-specific write-ups when the room is marked retired and the policy permits it.
+**Publishing boundary:** TryHackMe's current policy prohibits publishing flags, answers, solutions and step-by-step walkthroughs for active content; certification/exam content has separate permanent restrictions. Keep public notes conceptual and spoiler-free, and record your own observations separately.

@@ -1,58 +1,100 @@
-# SOC L1 Alert Triage — SOC L1 Field Notes
+# SOC L1 Alert Triage — SOC L1 Deep-Dive Notes
 
-> Independent study sheet for **SOC Team Internals**. This page is designed to help you understand the defensive skill and document your own observations; it is **not** an answer key or a room walkthrough.
+> **Independent analyst companion · SOC Team Internals**  
+> Technical concepts, investigation method, validation logic, safe tooling and reporting practice. This is not an official TryHackMe page and contains no room answers, flags or active-room solution steps.
 
-**Official path:** [TryHackMe SOC Level 1](https://tryhackme.com/path/outline/soclevel1) · **Module:** SOC Team Internals · **Sheet:** 00
-
-## Room focus
+## 1. Learning objective
 
 Triage state, priority, evidence and decision rationale ko consistent tareeke se record karna.
 
-## Concepts to carry into the room
+After this topic, you should be able to explain the data source, perform a small reproducible investigation, separate observed facts from inference, consider a benign alternative, state important visibility limits and recommend a proportionate next action.
 
-- Validate alert fields and rule logic before drawing conclusions.
-- Build a time-bounded scope around users, hosts, processes and network indicators.
-- Use verdicts such as benign, suspicious, confirmed or insufficient evidence according to local policy.
+## 2. Mental model
 
-## Analyst lens
+- Keep severity (potential impact), confidence (strength of evidence) and urgency (time sensitivity) separate.
+- A playbook is a versioned decision aid; include owner, revision, dependencies, exception path and failure behavior.
+- Metrics need precise start/stop events, denominators, time windows and exclusions before they can be compared.
+- A case is closed because evidence and policy support closure, not merely because the queue is busy.
 
-- Raw events, query/time range, related alerts, enrichment sources and confidence.
-- Evidence supporting and contradicting the initial alert.
+## 3. Room-specific analyst lens
 
-## A practical way to organise your own investigation
+**Focus:** Triage state, priority, evidence and decision rationale ko consistent tareeke se record karna.
 
-Use this as a general analyst workflow, not as a sequence of room-specific answers:
+**Technical angle:** Use an evidence matrix: alert condition, raw corroboration, contradictory evidence, telemetry gap and next pivot. Keep priority, confidence and urgency distinct.
 
-1. **Scope:** note the authorised lab/asset, time range, relevant identity or network entities, and the data source being examined.
-2. **Observe:** record raw evidence and query/filter details before summarising it.
-3. **Correlate:** connect records only when identifiers, timestamps and context support the relationship.
-4. **Challenge the hypothesis:** seek a benign explanation and note what evidence is missing.
-5. **Decide and communicate:** state the verdict with confidence, evidence, impact, next action and escalation owner.
+For your own lab session, answer these questions with evidence rather than memory:
 
-## Tooling / reference notes
+- Which artefact most directly supports the hypothesis, and which field matters?
+- Which benign workflow could produce a similar pattern?
+- What source or field is missing, stale or ambiguous?
+- What evidence would cause you to lower or raise confidence?
 
-No tool output is a verdict by itself. Write the case ID, analyst, time window, source system, status, confidence, business impact and next owner. Keep facts, hypotheses and actions separate.
+## 4. Investigation workflow
 
-## Common traps
+1. Validate alert metadata and the detection's actual conditions; identify duplicates and related alerts.
+2. Scope entities/time range and preserve raw events plus the initial query.
+3. Enrich in a repeatable order: identity, asset role, approved changes, related alerts and trusted intelligence.
+4. Record supporting evidence, contradictory evidence, confidence, remaining gaps and a verdict.
+5. Handoff with a named owner, requested action, urgency and what has already been checked.
 
-- Copying a reputation score without corroboration.
-- Changing a verdict without preserving the rationale.
+## 5. Signals, meaning and validation
 
-## Personal evidence worksheet
+| Observation pattern | Why it may matter | Validate before concluding |
+|---|---|---|
+| Aging high-priority case | Potentially harmful delay even when alert volume is stable. | Review impact, blockers, case owner and escalation SLA. |
+| Repeated false positives | May expose missing context or poor detection logic. | Test positive, benign and edge samples before tuning. |
+| Lookup/workbook failure | Stale/missing enrichment may corrupt decisions. | Test null, duplicate, stale and unavailable results explicitly. |
 
-Fill this with **your own observations** from an authorised session. Avoid publishing flags, answers, or restricted room-specific details.
+## 6. Tooling and analyst data
 
-| UTC timestamp / range | Source or artefact | Observed fact (not interpretation) | Interpretation / confidence | Next pivot |
+Illustrative case schema: `case_id`, `created_utc`, `first_seen_utc`, `rule_id`, `source`, `entities`, `severity`, `confidence`, `status`, `evidence_refs`, `actions`, `owner`, `closure_reason`. Adapt names to the local case platform.
+
+**Reproducibility rule:** record exact query/filter, source or data view, time range/timezone, tool/version and raw event/frame/document references. Counts and dashboards help prioritise; raw evidence supports the conclusion. Use only platform-assigned labs or systems you own/are authorised to test.
+
+## 7. False-positive and blind-spot review
+
+- Using MTTD/MTTR without consistent definitions.
+- Treating a missing lookup result as proof of benign activity.
+- Recording a verdict without enough evidence to reproduce it.
+
+Before closure, check wrong timezone, delayed ingestion, incomplete retention, non-unique join keys, duplicate records, stale enrichment, parser/schema changes and alternative legitimate workflows. An empty search result means only that the query returned no matches under its present assumptions.
+
+## 8. Independent practice drill
+
+Create a one-page sign-in anomaly playbook with required fields, safe enrichment, benign alternatives, stop conditions, escalation threshold and a test where the lookup service is unavailable.
+
+**Room-specific task:** Use an evidence matrix: alert condition, raw corroboration, contradictory evidence, telemetry gap and next pivot. Keep priority, confidence and urgency distinct.
+
+Produce an artefact register, one evidence-backed finding and a note describing what could not be established. Use synthetic or authorised data; do not query external targets as part of this exercise.
+
+## 9. Evidence worksheet
+
+| Time (UTC) | Source / artefact | Direct observation | Interpretation / confidence | Next pivot / owner |
 |---|---|---|---|---|
-| _Fill in_ | _Fill in_ | _Fill in_ | _Fill in_ | _Fill in_ |
+| _Your observation_ | _File/event/frame/query_ | _What the record literally shows_ | _Fact vs inference; why this confidence_ | _Testable next action_ |
+| _Corroborating item_ | _Independent source_ | _What it adds or contradicts_ | _Alternative explanation_ | _Owner / due time_ |
 
-## Write-up prompts
+## 10. Report format
 
-- What evidence supports the verdict?
-- What condition triggers escalation under the playbook?
+**Finding:** one plain-language sentence.  
+**Scope:** assets/users/records and bounded time range.  
+**Evidence:** source + timestamp + event/frame/document ID + query/filter.  
+**Assessment:** confirmed observation, interpretation, confidence and benign alternative.  
+**Impact:** what is affected and what remains unknown.  
+**Action:** action taken, approval boundary, next owner and success verification.  
+**Limitations:** missing logs, sampling, uncertain joins, tool constraints and follow-up evidence.
 
-When you finish, write a short report with: **summary**, **scope**, **key evidence**, **verdict and confidence**, **benign alternatives considered**, **impact**, **response or escalation**, and **limitations / next steps**. Every material conclusion should point back to a source or observation.
+**Illustrative phrasing:** “The available records show [observation] during [window]. This supports [hypothesis] with [confidence] because [corroboration]. [Alternative] remains plausible because [gap]. Next, validate [specific fact] using [source/owner] before [response decision].” Replace placeholders with your own evidence.
+
+## 11. Further reading
+
+- [NIST SP 800-61 Rev. 3](https://csrc.nist.gov/pubs/sp/800/61/r3/final)
+- [OWASP Logging Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html)
+- [NIST CSF 2.0](https://www.nist.gov/cyberframework)
+
+- [Official TryHackMe SOC Level 1 path](https://tryhackme.com/path/outline/soclevel1)
+- [TryHackMe Acceptable Use Policy](https://tryhackme.com/legal/acceptable-use-policy) — check the current policy and room status before publishing anything room-specific.
 
 ---
 
-**Publishing note:** TryHackMe's [Acceptable Use Policy](https://tryhackme.com/legal/acceptable-use-policy) prohibits publishing answers, flags, solutions and step-by-step walkthroughs for active content. Keep this public sheet conceptual and spoiler-free; keep your own private learning notes separate, and only publish room-specific write-ups when the room is marked retired and the policy permits it.
+**Publishing boundary:** TryHackMe's current policy prohibits publishing flags, answers, solutions and step-by-step walkthroughs for active content; certification/exam content has separate permanent restrictions. Keep public notes conceptual and spoiler-free, and record your own observations separately.
