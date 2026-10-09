@@ -19,7 +19,7 @@ Welcome to the main study track. Ye chapters sirf definitions ratne ke liye nahi
 ## Before you start
 
 - **Primary source:** the detailed text notes supplied for this repository.
-- **Supplementary PDF:** used only as a high-level cross-reference. That PDF explicitly describes some topics as inferred because a full transcript was unavailable; speculative points are not presented here as confirmed video content.
+- **Supplementary PDF:** used only as a high-level cross-reference. It mentions possible wider topics such as web testing, wireless/mobile, IoT/OT, cloud and cryptography, but explicitly says some of that coverage is inferred because a full transcript was unavailable. These remain optional scope hints—not confirmed day-by-day lecture content—until you share the actual notes.
 - **Coverage transparency:** the supplied text includes detailed chapters for Days 1–5 and Days 7–12. It only lists Day 6 and Day 13 in its closing curriculum table, so those two chapters are **expanded from that outline**, not represented as original detailed notes.
 - **Lab safety:** query examples and command lines are learning artifacts. Test them only in a lab or environment you are explicitly authorized to use. Never upload sensitive incident files or credentials into public sandboxes.
 
